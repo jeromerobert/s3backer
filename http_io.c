@@ -2008,7 +2008,7 @@ http_io_add_auth4(struct http_io_private *priv, struct http_io *const io, time_t
     char datebuf[DATE_BUF_SIZE];
     char access_id[128];
     char access_key[128];
-    char iam_token[1024];
+    char iam_token[2048];
     struct tm tm;
     char *p;
     int r;
@@ -2365,7 +2365,7 @@ http_io_add_date(struct http_io_private *const priv, struct http_io *const io, t
 static struct curl_slist *
 http_io_add_header(struct curl_slist *headers, const char *fmt, ...)
 {
-    char buf[1024];
+    char buf[2048];
     va_list args;
 
     va_start(args, fmt);
