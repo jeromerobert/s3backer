@@ -1,0 +1,9 @@
+FROM centos:7
+RUN yum install -y automake libcurl-devel fuse-devel expat-devel gcc openssl-devel make
+ADD . s3backer
+WORKDIR "./s3backer"
+RUN ["./autogen.sh"]
+RUN ["./configure"]
+RUN make -j $(nproc)
+RUN ["make", "install"]
+RUN strip /usr/bin/s3backer
