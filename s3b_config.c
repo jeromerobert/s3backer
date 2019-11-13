@@ -1063,8 +1063,6 @@ validate_config(void)
     /* Set default or custom region */
     if (config.http_io.region == NULL)
         config.http_io.region = S3BACKER_DEFAULT_REGION;
-    if (customRegion)
-        config.http_io.vhost = 1;
 
     /* Set default base URL */
     if (config.http_io.baseURL == NULL) {
