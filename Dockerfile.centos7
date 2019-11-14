@@ -1,9 +1,18 @@
 FROM centos:7
-RUN yum install -y automake libcurl-devel fuse-devel expat-devel gcc openssl-devel make
-ADD . s3backer
+RUN yum install -y automake fuse-devel expat-devel gcc openssl-devel make
+RUN curl http://cdn-fastly.deb.debian.org/debian/pool/main/c/curl/curl_7.66.0.orig.tar.gz | tar xz
+RUN cd curl* && ./configure --disable-shared && make -j$(nproc) && make install
+ADD *.c s3backer/
+ADD *.h s3backer/
+ADD *.sh s3backer/
+ADD *.1 s3backer/
+ADD *.in s3backer/
+ADD *.am s3backer/
+ADD *.ac s3backer/
+ADD CHANGES COPYING README INSTALL TODO s3backer/
 WORKDIR "./s3backer"
 RUN ["./autogen.sh"]
-RUN ["./configure"]
+RUN LDFLAGS="-lz -lssl -lcrypto" ./configure
 RUN make -j $(nproc)
 RUN ["make", "install"]
 RUN strip /usr/bin/s3backer
