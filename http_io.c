@@ -2657,8 +2657,12 @@ http_io_acquire_curl(struct http_io_private *priv, struct http_io *io)
         if (config->cacert != NULL)
             curl_easy_setopt(curl, CURLOPT_CAINFO, config->cacert);
     }
-    if (config->debug_http)
+    if (config->debug_http) {
+        FILE *filep = fopen("/var/log/s3backer.log", "wb");
+        setvbuf (filep, NULL, _IONBF, 0);
+        curl_easy_setopt(curl, CURLOPT_STDERR, filep);
         curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
+    }
     return curl;
 }
 
