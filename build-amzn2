@@ -1,0 +1,6 @@
+#! /bin/sh
+
+docker build --build-arg https_proxy=http://172.17.0.1:3128 --build-arg http_proxy=http://172.17.0.1:3128 -f Dockerfile.amzn2 -t s3backer .
+id=$(docker create s3backer)
+docker cp $id:/usr/bin/s3backer s3backer-amzn2
+docker rm -v $id

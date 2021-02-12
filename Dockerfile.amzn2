@@ -1,0 +1,19 @@
+FROM amazonlinux
+RUN echo sslverify=false >> /etc/yum.conf
+RUN yum install -y automake fuse-devel expat-devel gcc openssl-devel make libcurl-devel
+ADD *.c s3backer/
+ADD *.h s3backer/
+ADD *.sh s3backer/
+ADD *.1 s3backer/
+ADD *.in s3backer/
+ADD *.am s3backer/
+ADD *.ac s3backer/
+ADD CHANGES COPYING README INSTALL TODO s3backer/
+WORKDIR "./s3backer"
+RUN ["./autogen.sh"]
+#RUN LDFLAGS="-lz -lssl -lcrypto" ./configure
+RUN ./configure
+RUN make -j $(nproc)
+RUN ["make", "install"]
+RUN strip /usr/bin/s3backer
+RUN ldd /usr/bin/s3backer
